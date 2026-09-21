@@ -171,7 +171,26 @@ GoFEC/
 
 ## Used By
 
-- [NRUP](https://github.com/Nyarime/NRUP) — Nyarime Reliable UDP Protocol
+GoFEC is a **standalone FEC library** in the Nyarime stack — NYA pulls it via
+`go get` instead of baking erasure coding into the archive format. The same
+pattern is planned for standalone codec repos (see ecosystem below).
+
+| Project | Role |
+| --- | --- |
+| [NYA](https://github.com/nyarime/nya) | Archive + FEC + distribution (`nya augment`, embedded FEC; Leopard-RS / Hybrid / RaptorQ via GoFEC) |
+| [NRUP](https://github.com/Nyarime/NRUP) | Nyarime Reliable UDP Protocol (transport FEC) |
+
+### Nyarime library ecosystem (direction)
+
+| Library | Status | Notes |
+| --- | --- | --- |
+| **GoFEC** (this repo) | ✅ standalone | Pure Go FEC, SIMD, no cgo |
+| **nyazstd** | 📋 planned split | In-house RFC 8878 zstd encoder/decoder; today inside `nya`, target `go get` like GoFEC |
+| **nyalzma2** | ⏳ polish first, then open | In-house raw LZMA2 streams; **no separate repo until library-quality** (ratio/maturity still chasing xz/7z — see NYA [SPEC-CODECS](https://github.com/nyarime/nya/blob/main/SPEC-CODECS.md)) |
+| **nya** | ✅ | Archive container + FEC orchestration + distribution; depends on libs above |
+
+Encoder upgrades do **not** change NYA on-disk payload formats for a given
+CompressionID; splitting repos is for reuse and testing, not format churn.
 
 ## Acknowledgments
 

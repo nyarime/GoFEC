@@ -187,7 +187,23 @@ SIMD 自动调度: AVX512 GFNI > AVX2 > SSE4.1 > NEON > scalar
 
 ## 被引用
 
-- [NRUP](https://github.com/Nyarime/NRUP) — Nyarime Reliable UDP Protocol
+GoFEC 是 Nyarime 自研栈里的**独立 FEC 库**——NYA 归档通过 `go get` 引用它，而不是把纠删码锁死在归档格式里。同类思路也适用于未来的独立编解码库（见下方生态）。
+
+| 项目 | 用途 |
+| --- | --- |
+| [NYA](https://github.com/nyarime/nya) | 归档 + FEC + 分发（`nya augment`、内嵌 FEC；Leopard-RS / Hybrid / RaptorQ 等经 GoFEC） |
+| [NRUP](https://github.com/Nyarime/NRUP) | Nyarime Reliable UDP Protocol（传输层 FEC） |
+
+### Nyarime 库生态（方向）
+
+| 库 | 状态 | 说明 |
+| --- | --- | --- |
+| **GoFEC**（本仓库） | ✅ 独立开源 | 纯 Go FEC，SIMD，无 cgo |
+| **nyazstd** | 📋 计划拆库 | 自研 RFC 8878 Zstd 编码器/解码器；目前在 `nya` 包内，目标像 GoFEC 一样可 `go get` 单独用 |
+| **nyalzma2** | ⏳ 先打磨，再开源 | 自研 raw LZMA2 流；**未达对外库质量前不单独发仓库**（比率/成熟度仍追 xz/7z，见 NYA [SPEC-CODECS](https://github.com/nyarime/nya/blob/main/SPEC-CODECS.md)） |
+| **nya** | ✅ | 归档容器 + FEC 编排 + 分发；引用上述库而非内嵌一切 |
+
+编解码器改进**不改变** NYA 盘上 `CompressionID` 对应的 payload 格式；拆库是为了复用与测试，不是为了换格式。
 
 ## 致谢
 
